@@ -38,6 +38,7 @@ if __name__ == "__main__":
 	parser.add_argument("-u", "--url",
 			nargs="?",
 			type=str,
+			required=True,
 			help="The website you would like to check")
 	parser.add_argument("-e", "--email",
 			nargs="?",
