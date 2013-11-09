@@ -35,10 +35,21 @@ class Poller:
 
 if __name__ == "__main__":
 	parser = ArgumentParser(description="Emails you when a given website changes")
-	parser.add_argument("-u", "--url", nargs="?", type=str, help="The website you would like to check")
-	parser.add_argument("-e", "--email", nargs="?", type=str, help="your email")
-	parser.add_argument("-i", "--interval", type=int, help="How often you would like to check (in minutes)")
-	parser.add_argument("-m", "--message", type=str, help="The message you would like to see in your email notification")
+	parser.add_argument("-u", "--url",
+			nargs="?",
+			type=str,
+			help="The website you would like to check")
+	parser.add_argument("-e", "--email",
+			nargs="?",
+			type=str,
+			required=True,
+			help="your email")
+	parser.add_argument("-i", "--interval",
+			type=int,
+			help="How often you would like to check (in minutes)")
+	parser.add_argument("-m", "--message",
+			type=str,
+			help="The message you would like to see in your email notification")
 	args = parser.parse_args()
 	sched.start()
 	interval = args.interval
