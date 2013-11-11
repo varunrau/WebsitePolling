@@ -3,6 +3,7 @@ from emailer import Emailer
 import sys
 from argparse import ArgumentParser
 import time
+import datetime
 
 interval = 3600
 
@@ -13,7 +14,10 @@ class Poller:
 		self.url = page
 		self.cached_page = self.poll()
 		self.email = email
-		self.message = message
+		if message:
+			self.message = "\n" + str(message)
+		else:
+			self.message = "\nThe website " + self.url + " has changed."
 		self.interval = interval
 		self.done = False
 
@@ -31,10 +35,8 @@ class Poller:
 		if self.did_change():
 			print "Sending email"
 			emailer = Emailer(self.email)
-			if self.message:
-				emailer.send_message(self.message)
-			else:
-				emailer.send_message()
+			self.message += "\n" + self.url + " changed on " + str(datetime.datetime.now()) + "."
+			emailer.send_message(self.message)
 			self.done = True
 
 	def did_change(self):
