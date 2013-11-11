@@ -1,10 +1,9 @@
 import urllib2
-from apscheduler.scheduler import Scheduler
 from emailer import Emailer
 import sys
 from argparse import ArgumentParser
+import time
 
-sched = Scheduler()
 interval = 3600
 
 class Poller:
@@ -16,6 +15,7 @@ class Poller:
 		self.email = email
 		self.message = message
 		self.interval = interval
+		self.done = False
 
 	def poll(self):
 		usock = urllib2.urlopen(self.url)
@@ -23,12 +23,19 @@ class Poller:
 		usock.close()
 		return data
 
-	@sched.interval_schedule(minutes=interval)
+	def isDone(self):
+		return self.done
+
 	def check_page(self):
+		print "checking..."
 		if self.did_change():
+			print "Sending email"
 			emailer = Emailer(self.email)
-			emailer.send_message(self.message)
-			sched.shutdown()
+			if self.message:
+				emailer.send_message(self.message)
+			else:
+				emailer.send_message()
+			self.done = True
 
 	def did_change(self):
 		return self.poll() != self.cached_page
@@ -52,7 +59,9 @@ if __name__ == "__main__":
 			type=str,
 			help="The message you would like to see in your email notification")
 	args = parser.parse_args()
-	sched.start()
 	interval = args.interval
 	poller = Poller(args.url, args.interval, args.email, args.message)
+	while not poller.isDone():
+		poller.check_page()
+		time.sleep(args.interval * 60)
 
