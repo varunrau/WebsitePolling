@@ -37,6 +37,11 @@ class Poller:
 			emailer = Emailer(self.email)
 			self.message += "\n" + self.url + " changed on " + str(datetime.datetime.now()) + "."
 			emailer.send_message(self.message)
+			emailer.notify(
+					title = 'Website changed',
+					subtitle = None,
+					message = self.message
+					)
 			self.done = True
 
 	def did_change(self):
