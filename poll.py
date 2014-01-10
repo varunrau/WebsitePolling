@@ -40,7 +40,7 @@ class Poller:
 			emailer.notify(
 					title = 'Website changed',
 					subtitle = '',
-					message = self.message,
+					message = self.message.strip(),
 					open = self.url
 					)
 			self.done = True
