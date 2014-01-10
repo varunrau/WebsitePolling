@@ -17,9 +17,10 @@ class Emailer:
 		email = "Subject: %s\n\n%s" % ("Your reminder from Website Polling", message)
 		self.server.sendmail(self.FROM_EMAIL, self.email_address, email)
 
-	def notify(title, subtitle, message):
+	def notify(self, title, subtitle, message, open):
 		t = '-title {!r}'.format(title)
 		s = '-subtitle {!r}'.format(subtitle)
 		m = '-message {!r}'.format(message)
-		os.system('terminal-notifier {}'.format(' '.join([m, t, s])))
+		o = '-open {!r}'.format(open)
+		os.system('terminal-notifier {}'.format(' '.join([m, t, s, o])))
 
